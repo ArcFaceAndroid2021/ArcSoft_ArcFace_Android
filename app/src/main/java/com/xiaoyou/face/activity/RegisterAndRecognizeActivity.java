@@ -86,8 +86,6 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * 人脸识别的核心部分
- * @author 小游
- * @date 2020/12/16
  */
 public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTreeObserver.OnGlobalLayoutListener {
     private static final String TAG = "RegisterAndRecognize";

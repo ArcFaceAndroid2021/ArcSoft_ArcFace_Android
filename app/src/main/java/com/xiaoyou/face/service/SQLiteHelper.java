@@ -18,10 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author lenyuqin
- * @data 2020/12/16
- */
+
 public class SQLiteHelper extends SQLiteOpenHelper implements Service {
     private final static String DATABASE_NAME = "FaceCheck";
     private final static int DATABASE_VERSION = 1;

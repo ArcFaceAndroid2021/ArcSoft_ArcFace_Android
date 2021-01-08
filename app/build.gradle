@@ -4,6 +4,14 @@ plugins {
 
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('G:\\Desktop\\android\\face.jks')
+            storePassword '123456'
+            keyAlias 'face'
+            keyPassword '000000'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 

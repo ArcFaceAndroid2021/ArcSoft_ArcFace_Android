@@ -35,7 +35,6 @@ import java.util.Objects;
 
 /**
  * 查询界面
- * @author 小游
  */
 public class MeFragment extends Fragment {
 

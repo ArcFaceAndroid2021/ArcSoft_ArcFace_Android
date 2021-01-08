@@ -40,7 +40,6 @@ import java.util.List;
 
 /**
  *  工具界面点击效果
- * @author 小游
  */
 public class ToolFragment extends Fragment {
     private FragmentToolBinding binding;

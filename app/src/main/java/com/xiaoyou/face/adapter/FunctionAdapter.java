@@ -16,8 +16,6 @@ import java.util.ArrayList;
 
 /**
  * 九宫格布局的适配器
- * @author 小游
- * @date 2020/12/15
  */
 public class FunctionAdapter extends BaseAdapter {
 

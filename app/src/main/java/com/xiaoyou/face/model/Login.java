@@ -8,8 +8,6 @@ import lombok.Data;
 
 /**
  *  用户签到信息
- * @author 小游
- * @date 2020/12/16
  */
 @Data
 @AllArgsConstructor

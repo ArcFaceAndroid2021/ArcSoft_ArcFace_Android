@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 比对结果
- * @author 小游
- * @date 2020/12/16
+
  */
 @Data
 @AllArgsConstructor

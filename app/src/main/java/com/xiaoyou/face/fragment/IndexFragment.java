@@ -33,8 +33,6 @@ import java.util.Map;
 
 /**
  * 打卡的fragment类
- * @author 小游
- * @date 2020/12/14
  */
 public class IndexFragment extends Fragment implements
         CalendarView.OnCalendarSelectListener,

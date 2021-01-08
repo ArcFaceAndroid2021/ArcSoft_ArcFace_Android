@@ -14,8 +14,6 @@ import java.util.List;
 
 /**
  * 圆环管理类
- * @author 小游
- * @date 2020/12/16
  */
 public class PieChartManager {
     public PieChart pieChart;

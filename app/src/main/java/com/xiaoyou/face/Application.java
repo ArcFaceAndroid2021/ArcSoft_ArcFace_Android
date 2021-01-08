@@ -4,8 +4,6 @@ import com.xuexiang.xui.XUI;
 
 /**
  * application类
- * @author 小游
- * @date 2020/12/14
  */
 public class Application extends android.app.Application {
     @Override

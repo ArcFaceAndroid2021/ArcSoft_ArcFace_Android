@@ -2,10 +2,7 @@ package com.xiaoyou.face.service;
 
 import lombok.Getter;
 
-/**
- * @author lenyuqin
- * @data 2020/12/16
- */
+
 @Getter
 public enum Is_Sign {
     //打卡成功
