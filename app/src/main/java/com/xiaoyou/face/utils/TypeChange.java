@@ -8,9 +8,6 @@ import java.io.InputStream;
 
 /**
  * 类型转换函数
- *
- * @author 小游
- * @date 2020/12/15
  */
 public class TypeChange {
     /**

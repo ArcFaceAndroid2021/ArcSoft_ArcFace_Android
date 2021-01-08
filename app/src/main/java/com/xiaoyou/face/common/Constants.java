@@ -1,7 +1,7 @@
 package com.xiaoyou.face.common;
 
 public class Constants {
-
+    //虹软SDK许可码
     public static final String APP_ID = "AbUKUq5A8XwRn8o5pErSMmrEdeQ2p7y8pCxpsoLQGdDs";
     public static final String SDK_KEY = "HseJuRGE3V6gdLjDdgsdK9bi5wj4PzGLhTL35gFCXMss";
 

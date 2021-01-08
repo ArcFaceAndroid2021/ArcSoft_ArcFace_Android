@@ -29,7 +29,6 @@ import java.util.List;
 
 /**
  * 签到详情显示
- * @author 小游
  */
 public class SignDetailActivity extends AppCompatActivity {
 

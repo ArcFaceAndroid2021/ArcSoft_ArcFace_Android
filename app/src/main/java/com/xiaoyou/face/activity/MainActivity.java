@@ -44,8 +44,6 @@ import static com.arcsoft.face.enums.DetectFaceOrientPriority.ASF_OP_ALL_OUT;
 
 /**
  * 主activity
- * @author 小游
- * @date 2020/12/14
  */
 public class MainActivity extends BaseActivity {
 

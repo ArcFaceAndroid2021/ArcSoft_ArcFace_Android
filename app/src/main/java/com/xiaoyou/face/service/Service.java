@@ -5,10 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * @author lenyuqin
- * @data 2020/12/18
- */
+
 public interface Service {
     /**
      * 学生注册

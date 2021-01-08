@@ -11,8 +11,6 @@ import com.xuexiang.xui.widget.toast.XToast;
 
 /**
  * 自定义弹框函数
- * @author 小游
- * @date 2020/12/15
  */
 @SuppressLint("CheckResult")
 public final class ToastUtils {

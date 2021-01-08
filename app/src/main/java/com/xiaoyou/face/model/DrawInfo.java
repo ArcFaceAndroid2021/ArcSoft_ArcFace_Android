@@ -4,7 +4,6 @@ import android.graphics.Rect;
 
 /**
  * 画笔信息
- * @author 小游
  */
 public class DrawInfo {
     private Rect rect;

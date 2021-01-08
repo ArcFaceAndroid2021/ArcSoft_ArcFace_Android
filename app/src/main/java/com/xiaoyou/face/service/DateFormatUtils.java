@@ -8,10 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-/**
- * @author lenyuqin
- * @data 2020/12/18
- */
+
 public class DateFormatUtils {
 
 

@@ -8,10 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author lenyuqin
- * @data 2020/12/16
- */
+
 @Data
 @AllArgsConstructor
 public class StudentInfo {

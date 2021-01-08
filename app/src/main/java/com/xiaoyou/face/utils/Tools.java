@@ -9,8 +9,6 @@ import java.util.Random;
 
 /**
  * 一些常用的工具类
- * @author 小游
- * @date 2020/12/18
  */
 public class Tools {
 

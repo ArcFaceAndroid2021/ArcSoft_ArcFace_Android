@@ -22,8 +22,6 @@ import java.util.List;
 
 /**
  * 人脸搜索显示的adapter
- * @author 小游
- * @date 2020/11/16
  */
 public class FaceSearchResultAdapter extends RecyclerView.Adapter<FaceSearchResultAdapter.CompareResultHolder> {
     private final List<CompareResult> compareResultList;
