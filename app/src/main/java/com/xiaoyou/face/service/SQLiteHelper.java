@@ -33,6 +33,9 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
     String sql = "CREATE TABLE attendance (stu_id int(11) NOT NULL ," +
             "  name varchar(20) DEFAULT NULL ," +
             "  is_Sign bit(1) DEFAULT NULL ," +
+            "  is_Late bit(1) DEFAULT NULL ,"+
+            "  is_Asked bit(1) DEFAULT NULL , "+//是否请假
+            "  gps_msg varchar(30) DEFAULT NULL ,"+
             "  day int(5) DEFAULT NULL ," +
             "  date date  DEFAULT NULL ," +
             "  month int(5) DEFAULT NULL ," +
@@ -278,6 +281,35 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
         cv.put("stu_id", stuId);
         cv.put("name", name);
         cv.put("is_Sign", Is_Sign.TURE.getCode());
+        cv.put("is_Asked", 0);
+        cv.put("is_Late", 0);//默认没迟到没请假
+        cv.put("day", data.getDayOfMonth());
+        cv.put("month", data.getMonthValue());
+        cv.put("year", data.getYear());
+        cv.put("date", DateFormatUtils.getTodayDate());
+        return db.insert(TABLE_ATTENDANCE, null, cv) == 1;
+    }
+
+    /**
+     *
+     * 重载函数，加入gps信息
+     * @param stuId
+     * @param name
+     * @param data
+     * @param gps_msg
+     * @return
+     */
+    @Override
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Boolean signUp(String stuId, String name, LocalDateTime data,String gps_msg) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("stu_id", stuId);
+        cv.put("name", name);
+        cv.put("gps_msg",gps_msg);
+        cv.put("is_Sign", Is_Sign.TURE.getCode());
+        cv.put("is_Asked", 0);
+        cv.put("is_Late", 0);//默认没迟到没请假
         cv.put("day", data.getDayOfMonth());
         cv.put("month", data.getMonthValue());
         cv.put("year", data.getYear());
@@ -305,5 +337,47 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
         return cursor.getCount() == 1;
     }
 
+    /**
+     *  将指定学号的学生当天考勤记录设为迟到
+     *  这里用的是本机设备当天日期
+     * @param stuId 学生学号
+     * @param data 指定日期
+     */
+    @Override
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean setIsLate(String stuId, LocalDateTime data){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] selectionArgs = new String[4];
+        selectionArgs[0] = String.valueOf(stuId);
+        selectionArgs[1] = String.valueOf(LocalDateTime.now().getDayOfMonth());
+        selectionArgs[2] = String.valueOf(LocalDate.now().getMonthValue());
+        selectionArgs[3] = String.valueOf(LocalDate.now().getYear());
+        ContentValues v1 = new ContentValues();
+        v1.put("is_Late",1);
+        return db.update(TABLE_ATTE0NDANCE,v1,"stu_id = ? and day= ? and month = ? and year = ?  ",selectionArgs)==1;
+    }
 
+    /**
+     * 添加学生请假的考勤记录
+     * @param stuId
+     * @param name
+     * @param data
+     * @return
+     */
+    @Override
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean addLeave(String stuId,String name, LocalDate data) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("stu_id", stuId);
+        cv.put("name", name);
+        cv.put("is_Sign", Is_Sign.TURE.getCode());
+        cv.put("is_Asked", 0);
+        cv.put("is_Late", 0);//默认没迟到没请假
+        cv.put("day", data.getDayOfMonth());
+        cv.put("month", data.getMonthValue());
+        cv.put("year", data.getYear());
+        cv.put("date", DateFormatUtils.getTodayDate());
+        return db.insert(TABLE_ATTENDANCE, null, cv) == 1;
+    }
 }
