@@ -16,6 +16,7 @@ import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
 import com.xiaoyou.face.R;
+import com.xiaoyou.face.activity.IndexActivity;
 import com.xiaoyou.face.activity.RegisterAndRecognizeActivity;
 import com.xiaoyou.face.activity.SignDetailActivity;
 import com.xiaoyou.face.adapter.FunctionAdapter;
@@ -90,6 +91,9 @@ public class IndexFragment extends Fragment implements
         channelList.add(new Channel(R.mipmap.face,"人脸录入"));
         channelList.add(new Channel(R.mipmap.login,"开始签到"));
         channelList.add(new Channel(R.mipmap.statistics,"签到详情"));
+        channelList.add(new Channel(R.mipmap.maps,"教室导航"));
+        channelList.add(new Channel(R.mipmap.leave_request,"请假"));
+        channelList.add(new Channel(R.mipmap.remind,"提醒"));
         binding.toolList.setAdapter(new FunctionAdapter(channelList,getContext()));
         // grad 布局点击事件监听
         binding.toolList.setOnItemClickListener((parent, view, position, id) -> {
@@ -106,6 +110,18 @@ public class IndexFragment extends Fragment implements
                 case 2:
                     startActivity(new Intent(getContext(), SignDetailActivity.class));
                     break;
+                case 3:
+                    //to do
+                    //教室导航
+                    startActivity(new Intent(getContext(), IndexActivity.class));
+                    break;
+                case 4:
+                    //to do
+
+                case 5:
+                    //to do
+                    //请假
+                    //startActivity(new Intent(getContext(), JPushMainActivity.class));
                 default:
                     break;
             }
