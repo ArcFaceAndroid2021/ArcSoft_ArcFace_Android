@@ -1,11 +1,13 @@
 package com.xiaoyou.face.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ import com.xiaoyou.face.service.SQLiteHelper;
 import com.xiaoyou.face.service.Service;
 import com.xiaoyou.face.utils.Tools;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,7 +124,23 @@ public class IndexFragment extends Fragment implements
                 case 5:
                     //to do
                     //请假
-                    //startActivity(new Intent(getContext(), JPushMainActivity.class));
+
+                    try{
+                        //startActivity(new Intent(getContext(), JPushMainActivity.class));
+                        String packageName = "com.xuexiang.jpushsample";
+                        String activity = "com.xuexiang.jpushsample.MainFragment";
+                        ComponentName component = new ComponentName(packageName,activity);
+                        Intent pushIntent = new Intent();
+                        if(isInstallByread("com.xuexiang.jpushsample")){
+                            pushIntent.setComponent(component);
+                            startActivity(pushIntent);
+                        }  else{
+                            System.out.println("error!");
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    break;
                 default:
                     break;
             }
@@ -140,6 +159,14 @@ public class IndexFragment extends Fragment implements
 
     }
 
+    /**
+     * 判断是否安装目标应用
+     * @param packageName 目标应用安装后的包名
+     * @return 是否已安装目标应用
+     */
+    private boolean isInstallByread(String packageName) {
+        return new File("/data/data/" + packageName).exists();
+    }
     /**
      *  日历视图点击事件
       * @param calendar 日历控件
