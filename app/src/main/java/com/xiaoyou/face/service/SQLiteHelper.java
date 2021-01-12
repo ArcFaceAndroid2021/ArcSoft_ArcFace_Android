@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
-
+import android.os.Handler;
 import androidx.annotation.RequiresApi;
 
 import java.text.ParseException;
@@ -17,19 +17,36 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-
+/**
+ * @author lenyuqin
+ * @data 2020/12/16
+ */
 public class SQLiteHelper extends SQLiteOpenHelper implements Service {
     private final static String DATABASE_NAME = "FaceCheck";
     private final static int DATABASE_VERSION = 1;
     private final static String TABLE_ATTENDANCE = "attendance";
     private final static String TABLE_STUDENT = "student";
 
+    private String url="jdbc:mysql://39.107.245.110:3306/FaceCheck?useUnicode=true&characterEncoding=utf-8&useSSL=true";
+    private String password = "53enjhhnhjRy7ewG";
+    private String username="FaceCheck";
+
     //创建数据库，里面添加了3个参数，分别是：Msgone VARCHAR类型，30长度当然这了可以自定义
     //Msgtwo VARCHAR(20)   Msgthree VARCHAR(30))  NOT NULL不能为空
+    //is_Sign 是否签到
+    //新增is_Late 是否迟到、is_Asked 是否请假、gps_msg 位置信息
     String sql = "CREATE TABLE attendance (stu_id int(11) NOT NULL ," +
             "  name varchar(20) DEFAULT NULL ," +
             "  is_Sign bit(1) DEFAULT NULL ," +
+            "  is_Late bit(1) DEFAULT NULL ,"+
+            "  is_Asked bit(1) DEFAULT NULL , "+//是否请假
+            "  gps_msg varchar(30) DEFAULT NULL ,"+
             "  day int(5) DEFAULT NULL ," +
             "  date date  DEFAULT NULL ," +
             "  month int(5) DEFAULT NULL ," +
@@ -95,6 +112,28 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
         cv.put("id", registerInfo.getId());
         cv.put("stu_id", registerInfo.getStuId());
         cv.put("name", registerInfo.getName());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection cn = DriverManager.getConnection(url,username,password);
+                    System.out.println("学生注册信息连接数据库成功");
+                    Statement st = cn.createStatement();
+                    String sql ="insert into student values( '"+registerInfo.getId()+"','"+registerInfo.getStuId()+"','"+registerInfo.getName()+"')";
+                    System.out.println(sql);
+                    st.execute(sql);
+                    System.out.println("插入成功");
+                } catch (ClassNotFoundException | SQLException e) {
+                    System.out.println("插入失败");
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+
+
+
         return db.insert(TABLE_STUDENT, null, cv);
     }
 
@@ -275,6 +314,54 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
         cv.put("stu_id", stuId);
         cv.put("name", name);
         cv.put("is_Sign", Is_Sign.TURE.getCode());
+        cv.put("is_Asked", 0);
+        cv.put("is_Late", 0);//默认没迟到没请假
+        cv.put("day", data.getDayOfMonth());
+        cv.put("month", data.getMonthValue());
+        cv.put("year", data.getYear());
+        cv.put("date", DateFormatUtils.getTodayDate());
+        boolean end=false;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection cn =DriverManager.getConnection(url,"FaceCheck",password);
+                    System.out.println("签到Connection连接数据库成功");
+                    Statement st = cn.createStatement();
+                    String sql ="insert into attendance values( '"+name+"',"+Integer.parseInt(stuId)+","+Is_Sign.TURE.getCode()+", "+data.getDayOfMonth()+" , "+data.getMonthValue()+" , "+data.getYear()+" , '"+DateFormatUtils.getTodayDate()+"' )";
+                    System.out.println(sql);
+                    st.execute(sql);
+                    System.out.println("签到成功");
+                } catch (ClassNotFoundException | SQLException e) {
+                    System.out.println("签到失败");
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        return db.insert(TABLE_ATTENDANCE, null, cv) == 1;
+    }
+
+    /**
+     *
+     * 重载函数，加入gps信息
+     * @param stuId
+     * @param name
+     * @param data
+     * @param gps_msg
+     * @return
+     */
+    @Override
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Boolean signUp(String stuId, String name, LocalDateTime data,String gps_msg) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("stu_id", stuId);
+        cv.put("name", name);
+        cv.put("gps_msg",gps_msg);
+        cv.put("is_Sign", Is_Sign.TURE.getCode());
+        cv.put("is_Asked", 0);
+        cv.put("is_Late", 0);//默认没迟到没请假
         cv.put("day", data.getDayOfMonth());
         cv.put("month", data.getMonthValue());
         cv.put("year", data.getYear());
@@ -302,5 +389,47 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
         return cursor.getCount() == 1;
     }
 
+    /**
+     *  将指定学号的学生当天考勤记录设为迟到
+     *  这里用的是本机设备当天日期
+     * @param stuId 学生学号
+     * @param data 指定日期
+     */
+    @Override
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean setIsLate(String stuId, LocalDateTime data){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] selectionArgs = new String[4];
+        selectionArgs[0] = String.valueOf(stuId);
+        selectionArgs[1] = String.valueOf(LocalDateTime.now().getDayOfMonth());
+        selectionArgs[2] = String.valueOf(LocalDate.now().getMonthValue());
+        selectionArgs[3] = String.valueOf(LocalDate.now().getYear());
+        ContentValues v1 = new ContentValues();
+        v1.put("is_Late",1);
+        return db.update( TABLE_ATTENDANCE ,v1,"stu_id = ? and day= ? and month = ? and year = ?  ",selectionArgs)==1;
+    }
 
+    /**
+     * 添加学生请假的考勤记录
+     * @param stuId
+     * @param name
+     * @param data
+     * @return
+     */
+    @Override
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean addLeave(String stuId,String name, LocalDate data) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("stu_id", stuId);
+        cv.put("name", name);
+        cv.put("is_Sign", Is_Sign.TURE.getCode());
+        cv.put("is_Asked", 0);
+        cv.put("is_Late", 0);//默认没迟到没请假
+        cv.put("day", data.getDayOfMonth());
+        cv.put("month", data.getMonthValue());
+        cv.put("year", data.getYear());
+        cv.put("date", DateFormatUtils.getTodayDate());
+        return db.insert(TABLE_ATTENDANCE, null, cv) == 1;
+    }
 }

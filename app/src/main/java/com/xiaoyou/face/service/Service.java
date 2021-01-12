@@ -67,6 +67,7 @@ public interface Service {
     List<StudentInfoTO> queryStudentInfo(String stuId, String name) throws ParseException;
 
 
+
     /**
      * 签到
      *
@@ -78,6 +79,19 @@ public interface Service {
     Boolean signUp(String stuId, String name, LocalDateTime data);
 
 
+    //to do
+    /**
+     *
+     * @param stuId 学号
+     * @param name  用户名
+     * @param data  当前时间
+     * @param gps_msg GPS信息
+     * @return 是否插入成功
+     */
+    Boolean signUp(String stuId, String name, LocalDateTime data,String gps_msg);
+
+
+
     /**
      * 查询是否签到
      *
@@ -87,5 +101,29 @@ public interface Service {
      */
     Boolean isSignUp(String stuId, LocalDateTime data);
 
+
+    /**
+     * 设置指定学生考勤记录为迟到
+     *
+     * @param stuId 学生学号
+     *
+     */
+
+    /**
+     * 将指定学生的考勤记录设置为迟到
+     * @param stuId
+     * @param data
+     * @return 设置是否成功
+     */
+    boolean setIsLate(String stuId, LocalDateTime data);
+
+    /**
+     * 添加请假学生的考勤记录
+     * @param stuId
+     * @param name
+     * @param data
+     * @return
+     */
+    boolean addLeave(String stuId,String name,LocalDate data);
 
 }

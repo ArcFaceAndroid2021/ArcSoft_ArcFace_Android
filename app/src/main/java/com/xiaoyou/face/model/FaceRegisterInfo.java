@@ -27,4 +27,11 @@ public class FaceRegisterInfo {
     public void setFeatureData(byte[] featureData) {
         this.featureData = featureData;
     }
+
+    @Override
+    public String toString() {
+        return "FaceRegisterInfo{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

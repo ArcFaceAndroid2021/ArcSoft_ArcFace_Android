@@ -17,5 +17,8 @@ public enum Is_Sign {
         this.code = code;
     }
 
+//    public String getStuId() {
+//        return stuId;
+//    }
 
 }

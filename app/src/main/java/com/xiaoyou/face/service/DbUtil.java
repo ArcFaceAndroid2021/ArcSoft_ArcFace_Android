@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DbUtil {
-    private String dbUrl="jdbc:mysql://39.107.245.110:3306/db_student?useUnicode=true&characterEncoding=utf8&useSSL=true"; // 数据库连接地址
-    private String dbUserName="tangxushuo"; // 用户tangxueshuo
-    private String dbPassword="SKWFHbKi7RkTSEE8"; // 密码
+    private String dbUrl="jdbc:mysql://39.107.245.110:3306/FaceCheck?useUnicode=true&characterEncoding=utf8&useSSL=true"; // 数据库连接地址
+    private String dbUserName="FaceCheck"; // 用户名FaceCheck
+    private String dbPassword="53enjhhnhjRy7ewG"; // 密码
     private String jdbcName="com.mysql.jdbc.Driver"; // 驱动名称
     /**
      * 获取数据库连接
