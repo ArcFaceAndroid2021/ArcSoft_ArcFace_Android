@@ -456,6 +456,7 @@ public class FaceServer {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public CompareResult getTopOfFaceLib(FaceFeature faceFeature, Context context) {
+        System.err.println("Running getTopOfFaceLib");
         if (faceEngine == null || isProcessing || faceFeature == null || faceRegisterInfoList == null || faceRegisterInfoList.size() == 0) {
             return null;
         }
@@ -476,7 +477,9 @@ public class FaceServer {
         if (maxSimilarIndex != -1) {
             // 从数据库中查找信息
             Service sqLiteHelper = new SQLiteHelper(context);
-            RegisterInfo registerInfo = sqLiteHelper.getStudentInfo(Integer.parseInt(faceRegisterInfoList.get(maxSimilarIndex).getName()));
+System.err.println(faceRegisterInfoList.toString());
+            RegisterInfo registerInfo = sqLiteHelper.getStudentInfo(Integer.parseInt(faceRegisterInfoList.get(maxSimilarIndex).getName()));//？？？
+
             return new CompareResult(registerInfo.getId()+"",registerInfo.getStuId(),registerInfo.getName(),maxSimilar);
         }
         return null;

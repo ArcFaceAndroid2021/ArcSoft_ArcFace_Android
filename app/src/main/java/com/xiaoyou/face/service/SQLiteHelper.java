@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
-
+import android.os.Handler;
 import androidx.annotation.RequiresApi;
 
 import java.text.ParseException;
@@ -17,6 +17,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * @author lenyuqin
@@ -27,6 +32,10 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
     private final static int DATABASE_VERSION = 1;
     private final static String TABLE_ATTENDANCE = "attendance";
     private final static String TABLE_STUDENT = "student";
+
+    private String url="jdbc:mysql://39.107.245.110:3306/FaceCheck?useUnicode=true&characterEncoding=utf-8&useSSL=true";
+    private String password = "53enjhhnhjRy7ewG";
+    private String username="FaceCheck";
 
     //创建数据库，里面添加了3个参数，分别是：Msgone VARCHAR类型，30长度当然这了可以自定义
     //Msgtwo VARCHAR(20)   Msgthree VARCHAR(30))  NOT NULL不能为空
@@ -101,6 +110,28 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
         cv.put("id", registerInfo.getId());
         cv.put("stu_id", registerInfo.getStuId());
         cv.put("name", registerInfo.getName());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection cn = DriverManager.getConnection(url,username,password);
+                    System.out.println("学生注册信息连接数据库成功");
+                    Statement st = cn.createStatement();
+                    String sql ="insert into student values( '"+registerInfo.getId()+"','"+registerInfo.getStuId()+"','"+registerInfo.getName()+"')";
+                    System.out.println(sql);
+                    st.execute(sql);
+                    System.out.println("插入成功");
+                } catch (ClassNotFoundException | SQLException e) {
+                    System.out.println("插入失败");
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+
+
+
         return db.insert(TABLE_STUDENT, null, cv);
     }
 
@@ -287,6 +318,25 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
         cv.put("month", data.getMonthValue());
         cv.put("year", data.getYear());
         cv.put("date", DateFormatUtils.getTodayDate());
+        boolean end=false;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection cn =DriverManager.getConnection(url,"FaceCheck",password);
+                    System.out.println("签到Connection连接数据库成功");
+                    Statement st = cn.createStatement();
+                    String sql ="insert into attendance values( '"+name+"',"+Integer.parseInt(stuId)+","+Is_Sign.TURE.getCode()+", "+data.getDayOfMonth()+" , "+data.getMonthValue()+" , "+data.getYear()+" , '"+DateFormatUtils.getTodayDate()+"' )";
+                    System.out.println(sql);
+                    st.execute(sql);
+                    System.out.println("签到成功");
+                } catch (ClassNotFoundException | SQLException e) {
+                    System.out.println("签到失败");
+                    e.printStackTrace();
+                }
+            }
+        }).start();
         return db.insert(TABLE_ATTENDANCE, null, cv) == 1;
     }
 
@@ -354,7 +404,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
         selectionArgs[3] = String.valueOf(LocalDate.now().getYear());
         ContentValues v1 = new ContentValues();
         v1.put("is_Late",1);
-        return db.update(TABLE_ATTE0NDANCE,v1,"stu_id = ? and day= ? and month = ? and year = ?  ",selectionArgs)==1;
+        return db.update( TABLE_ATTENDANCE ,v1,"stu_id = ? and day= ? and month = ? and year = ?  ",selectionArgs)==1;
     }
 
     /**

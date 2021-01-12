@@ -13,6 +13,13 @@ public class FaceRegisterInfo {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "FaceRegisterInfo{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+
     public String getName() {
         return name;
     }

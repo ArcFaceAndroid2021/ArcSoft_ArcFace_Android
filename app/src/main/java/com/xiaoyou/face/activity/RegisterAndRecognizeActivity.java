@@ -621,6 +621,7 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             boolean success = FaceServer.getInstance().registerNv21(RegisterAndRecognizeActivity.this, nv21.clone(), previewSize.width, previewSize.height,
                     facePreviewInfoList.get(0).getFaceInfo(),""+id);
+            System.err.println("Registered a face , id is :"+id);
             emitter.onNext(success);
         }).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -716,6 +717,7 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
      * @param requestCode  请求码
      * @param isAllGranted 是否全部被同意
      */
+
     @Override
     void afterRequestPermission(int requestCode, boolean isAllGranted) {
         if (requestCode == ACTION_REQUEST_PERMISSIONS) {
@@ -778,12 +780,13 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void searchFace(final FaceFeature frFace, final Integer requestId) {
+        System.err.println("Searching face");
         Observable
                 .create((ObservableOnSubscribe<CompareResult>) emitter -> {
                     // 这里我们不断获取搜索到的结果并进行处理
-//                        Log.i(TAG, "subscribe: fr search start = " + System.currentTimeMillis() + " trackId = " + requestId);
+                       Log.i(TAG, "subscribe: fr search start = " + System.currentTimeMillis() + " trackId = " + requestId);
                     CompareResult compareResult = FaceServer.getInstance().getTopOfFaceLib(frFace,this);
-//                        Log.i(TAG, "subscribe: fr search end = " + System.currentTimeMillis() + " trackId = " + requestId);
+                       Log.i(TAG, "subscribe: fr search end = " + System.currentTimeMillis() + " trackId = " + requestId);
                     emitter.onNext(compareResult);
                 })
                 .subscribeOn(Schedulers.computation())
@@ -796,7 +799,7 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
 
                     @Override
                     public void onNext(CompareResult compareResult) {
-
+                        System.err.println(compareResult.toString());
                         // 这里判断我们获取到的比对结果是否为空
                         if (compareResult == null || compareResult.getId() == null) {
                             requestFeatureStatusMap.put(requestId, RequestFeatureStatus.FAILED);
