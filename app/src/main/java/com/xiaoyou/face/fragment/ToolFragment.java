@@ -94,12 +94,18 @@ public class ToolFragment extends Fragment {
         Service service = new SQLiteHelper(getContext());
         History history = service.getTodayHistory();
 
-        yvals.add(new PieEntry(history.getIsSignUp(), "已签到"));
-        yvals.add(new PieEntry(history.getNotSigUp(), "未签到"));
+        yvals.add(new PieEntry(10, "已签到"));
+        yvals.add(new PieEntry(10, "未签到"));
+        //添加迟到和请假
+        yvals.add(new PieEntry(10, "已迟到"));
+        yvals.add(new PieEntry(10, "已请假"));
+
         //设置每份的颜色
         List<Integer> colors = new ArrayList<>();
         colors.add(Color.parseColor("#409EFF"));
         colors.add(Color.parseColor("#F56C6C"));
+        colors.add(Color.parseColor("#90EE90"));
+        colors.add(Color.parseColor("#FFDEAD"));
         // 图表初始化
         PieChart pieChart = binding.flContainer;
         //  是否显示中间的洞
@@ -250,7 +256,14 @@ public class ToolFragment extends Fragment {
         xAxis.setDrawGridLines(false);
         // 获取考勤历史
         Service service = new SQLiteHelper(getContext());
-        List<DateHistoryTO> histories = service.getHistory();
+        //List<DateHistoryTO> histories = service.getHistory();
+
+        //*****测试用数据*****
+        List<DateHistoryTO> histories= new ArrayList<>();
+        histories.add(new DateHistoryTO(2021,1,13,10,10,10,10));
+        histories.add(new DateHistoryTO(2021,1,12,10,10,10,10));
+        histories.add(new DateHistoryTO(2021,1,11,10,10,10,10));
+        //********************
 
         // 设置x做显示
         ArrayList<String> data2 = new ArrayList<>();
@@ -269,14 +282,14 @@ public class ToolFragment extends Fragment {
         //数据集1
         List<BarEntry> valsComp1 = new ArrayList<BarEntry>();
         for(int i=0; i< histories.size();i++){
-            valsComp1.add(new BarEntry(i,new float[] { histories.get(i).getIsSign(), histories.get(i).getUnSign()}));
+            valsComp1.add(new BarEntry(i,new float[] { histories.get(i).getIsSign(), histories.get(i).getUnSign(),histories.get(i).getIsLate(),histories.get(i).getIsAsked()}));
         }
 
         //创建条形图对象
         BarDataSet setComp1 = new BarDataSet(valsComp1, "");
         setComp1.setDrawIcons(false);
-        setComp1.setColors(Color.parseColor("#67c23a"),Color.parseColor("#f56c6c"));
-        setComp1.setStackLabels(new String[]{"已签到", "未签到"});
+        setComp1.setColors(Color.parseColor("#409EFF"),Color.parseColor("#F56C6C"),Color.parseColor("#90EE90"),Color.parseColor("#FFDEAD"));
+        setComp1.setStackLabels(new String[]{"已签到", "未签到","已迟到","已请假"});
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(setComp1);
         //显示
@@ -285,7 +298,7 @@ public class ToolFragment extends Fragment {
         attendanceChart.setFitBars(true);
         attendanceChart.invalidate();
         //设置动画样式
-        attendanceChart.animateY(2000,Easing. EaseInOutQuad);
+        attendanceChart.animateY(200,Easing. EaseInOutQuad);
     }
 
 }
