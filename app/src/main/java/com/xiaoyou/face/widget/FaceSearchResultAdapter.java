@@ -74,6 +74,7 @@ public class FaceSearchResultAdapter extends RecyclerView.Adapter<FaceSearchResu
         TextView textView;
         TextView textNo;
         TextView textBelieve;
+        TextView textGPS;
         ImageView imageView;
         CompareResultHolder(@NonNull View itemView) {
             super(itemView);

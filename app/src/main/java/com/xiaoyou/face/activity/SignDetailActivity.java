@@ -67,9 +67,11 @@ public class SignDetailActivity extends AppCompatActivity {
             List<StudentInfoTO> histories =service.getCountToday();
             @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (StudentInfoTO history : histories) {
-                list.add(new Login(history.getStuId(),history.getName(),sdf.format(history.getDateTime())));
+                list.add(new Login(history.getStuId(),history.getName(),history.getSituation(),sdf.format(history.getDateTime()), history.getGPS_msg()));
+                System.err.println(history.getGPS_msg());
             }
         }catch (Exception e){
+            System.err.println(e.toString());
             return;
         }
         // 表格样式(占满全屏)

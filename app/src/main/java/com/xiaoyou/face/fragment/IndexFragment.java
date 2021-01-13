@@ -28,8 +28,12 @@ import com.xiaoyou.face.service.DateHistoryTO;
 import com.xiaoyou.face.service.SQLiteHelper;
 import com.xiaoyou.face.service.Service;
 import com.xiaoyou.face.utils.Tools;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
 
 import java.io.File;
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,26 +124,52 @@ public class IndexFragment extends Fragment implements
                     break;
                 case 4:
                     //to do
+                    //请假
+                    //新增一个对话框
+                    new MaterialDialog.Builder(getContext())
+                            .customView(R.layout.dialog_input, true)
+                            .title("请假信息录入")
+                            .positiveText("确认请假")
+                            .onPositive((dialog, which) -> {
+                                // 点击录入的时的点击事件
+                                MaterialEditText no = dialog.findViewById(R.id.input_no);//学号信息
+                                MaterialEditText name = dialog.findViewById(R.id.input_name);//姓名
 
+
+                                Service sqLiteHelper = new SQLiteHelper(getContext());
+                                //绑定SQLite对应的请假函数
+                                try{
+                                    sqLiteHelper.addLeave(no.getEditValue(),name.getEditValue());
+                                    System.out.println("Student id :"+no.getEditValue()+"    Student name is :"+name.getEditValue());
+                                } catch (ParseException e){
+                                    System.out.println("error!");
+                                }
+
+
+                            }).show();
+
+
+                    break;
                 case 5:
                     //to do
-                    //请假
+                    //提醒
 
-                    try{
-                        //startActivity(new Intent(getContext(), JPushMainActivity.class));
-                        String packageName = "com.xuexiang.jpushsample";
-                        String activity = "com.xuexiang.jpushsample.MainFragment";
-                        ComponentName component = new ComponentName(packageName,activity);
-                        Intent pushIntent = new Intent();
-                        if(isInstallByread("com.xuexiang.jpushsample")){
-                            pushIntent.setComponent(component);
-                            startActivity(pushIntent);
-                        }  else{
-                            System.out.println("error!");
-                        }
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
+                    //打开另一个APP
+//                    try{
+//                        //startActivity(new Intent(getContext(), JPushMainActivity.class));
+//                        String packageName = "com.xuexiang.jpushsample";
+//                        String activity = "com.xuexiang.jpushsample.MainFragment";
+//                        ComponentName component = new ComponentName(packageName,activity);
+//                        Intent pushIntent = new Intent();
+//                        if(isInstallByread("com.xuexiang.jpushsample")){
+//                            pushIntent.setComponent(component);
+//                            startActivity(pushIntent);
+//                        }  else{
+//                            System.out.println("error!");
+//                        }
+//                    } catch (Exception e){
+//                        e.printStackTrace();
+//                    }
                     break;
                 default:
                     break;

@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +31,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.huantansheng.easyphotos.EasyPhotos;
 import com.xiaoyou.face.R;
 import com.xiaoyou.face.engine.GlideEngine;
@@ -87,12 +94,16 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
+
+
 /**
  * 人脸识别的核心部分
  */
 public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTreeObserver.OnGlobalLayoutListener {
     private static final String TAG = "RegisterAndRecognize";
     private static final int MAX_DETECT_NUM = 10;
+
+    private String mLocation = "西北工业大学";
 
     /**
      * 是否为人脸录入界面
@@ -207,6 +218,7 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
 
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // 不在AndroidManifest.xml里面设置因为这个会无法继承AppCompatActivity
@@ -220,7 +232,9 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         //本地人脸库初始化
         FaceServer.getInstance().init(this);
-
+        //高德初始化定位
+        init();
+        //初始化识图
         initView();
     }
 
@@ -771,6 +785,65 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
         }
     }
 
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient = null;
+    //声明定位回调监听器
+    public AMapLocationListener mLocationListener = new MyAMapLocationListener();
+
+    //声明AMapLocationClientOption对象
+    public AMapLocationClientOption mLocationOption = null;
+
+    private void init() {
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //获取一次定位结果：
+        //该方法默认为false。
+        mLocationOption.setOnceLocation(false);
+
+        //获取最近3s内精度最高的一次定位结果：
+        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
+        mLocationOption.setOnceLocationLatest(true);
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setNeedAddress(true);
+        //设置是否允许模拟位置,默认为false，不允许模拟位置
+        mLocationOption.setMockEnable(false);
+        //关闭缓存机制
+        mLocationOption.setLocationCacheEnable(false);
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
+    }
+
+    private class MyAMapLocationListener implements AMapLocationListener {
+
+        @Override
+        public void onLocationChanged(AMapLocation aMapLocation) {
+            if (aMapLocation != null) {
+                if (aMapLocation.getErrorCode() == 0) {
+                    System.out.println(aMapLocation.getAddress());
+                    Log.e("位置：", aMapLocation.getAddress());
+                    String address = aMapLocation.getAddress();
+                    if (!TextUtils.isEmpty(address))
+                        mLocation = address;
+//                    ToastUtils.info(mLocation);
+                } else {
+                    System.out.println("error");
+                    //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                    Log.e("AmapError", "location Error, ErrCode:"
+                            + aMapLocation.getErrorCode() + ", errInfo:"
+                            + aMapLocation.getErrorInfo());
+                }
+            }
+        }
+    }
+
 
     /**
      * 搜索人脸
@@ -839,12 +912,40 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
                             }else{
                                 // 签到界面代码
                                 Service service = new SQLiteHelper(context);
+                                showToast(mLocation);
                                 // 判断用户是否签到过了
                                 if(service.isSignUp(compareResult.getUserNo(), LocalDateTime.now())){
+                                    //ToastUtils.info(mLocation);
                                     faceHelper.setName(requestId, getString(R.string.recognize_success_notice_true, compareResult.getUserName()));
                                 }else{
+
+//                                    // 获取位置服务
+//                                    String serviceName = Context.LOCATION_SERVICE;
+//                                    // 调用getSystemService()方法来获取LocationManager对象
+//                                    locationManager = (LocationManager) getSystemService(serviceName);
+//
+//                                    // 指定LocationManager的定位方法
+//                                    String provider = LocationManager.GPS_PROVIDER;
+//                                    // 调用getLastKnownLocation()方法获取当前的位置信息
+//                                    Location location = locationManager.getLastKnownLocation(provider);
+//                                    //获取纬度
+//                                    double lat = location.getLatitude();
+//                                    //获取经度
+//                                    double lng = location.getLongitude();
+
+
                                     // 插入签到数据
-                                    service.signUp(compareResult.getUserNo(),compareResult.getUserName(),LocalDateTime.now());
+                                    //ToastUtils.info(mLocation);
+//                                    while(mLocation.equals("西北工业大学")){
+//                                        new Handler().postDelayed(new Runnable() {
+//                                            public void run() {
+//                                                // yourMethod();
+//                                                System.out.println("等待");
+//                                            }
+//                                        }, 1000);   //5 seconds
+//                                    }
+                                    service.signUp(compareResult.getUserNo(),compareResult.getUserName(),LocalDateTime.now(),mLocation);
+
                                     faceHelper.setName(requestId, getString(R.string.recognize_success_notice, compareResult.getUserName()));
                                 }
                             }

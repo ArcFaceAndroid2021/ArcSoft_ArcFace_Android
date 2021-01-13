@@ -21,6 +21,47 @@ public class CompareResult {
      * 姓名
      */
     private String userName;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+//    public void setUserName(String userName) {
+//        this.userName = userName;
+//    }
+
+    public String getUserNo() {
+        return userNo;
+    }
+
+//    public void setUserNo(String userNo) {
+//        this.userNo = userNo;
+//    }
+
+    public float getSimilar() {
+        return similar;
+    }
+
+//    public void setSimilar(float similar) {
+//        this.similar = similar;
+//    }
+
+    public int getTrackId() {
+        return trackId;
+    }
+
+    public void setTrackId(int trackId) {
+        this.trackId = trackId;
+    }
+
     /**
      * 学号
      */

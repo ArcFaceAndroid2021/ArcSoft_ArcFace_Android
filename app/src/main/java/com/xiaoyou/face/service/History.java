@@ -15,6 +15,8 @@ public class History {
     private LocalDate date;
     private int isSignUp;
     private int notSigUp;
+    private int isLate;
+    private int isAsk;
 
     public LocalDate getDate() {
         return date;
@@ -38,5 +40,21 @@ public class History {
 
     public void setNotSigUp(int notSigUp) {
         this.notSigUp = notSigUp;
+    }
+
+    public int getIsLate() {
+        return isLate;
+    }
+
+    public void setIsLate(int isLate) {
+        this.isLate = isLate;
+    }
+
+    public int getIsAsk() {
+        return isAsk;
+    }
+
+    public void setIsAsk(int isAsk) {
+        this.isAsk = isAsk;
     }
 }

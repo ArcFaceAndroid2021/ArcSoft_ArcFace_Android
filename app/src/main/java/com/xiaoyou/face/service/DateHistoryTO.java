@@ -13,6 +13,9 @@ public class DateHistoryTO {
     private int month;
     private int isSign;
     private int unSign;
+    private int isLate;
+    private int isAsk;
+
 
     public int getYear() {
         return year;
@@ -52,5 +55,21 @@ public class DateHistoryTO {
 
     public void setUnSign(int unSign) {
         this.unSign = unSign;
+    }
+
+    public int getIsLate() {
+        return isLate;
+    }
+
+    public void setIsLate(int isLate) {
+        this.isLate = isLate;
+    }
+
+    public int getIsAsk() {
+        return isAsk;
+    }
+
+    public void setIsAsk(int isAsk) {
+        this.isAsk = isAsk;
     }
 }

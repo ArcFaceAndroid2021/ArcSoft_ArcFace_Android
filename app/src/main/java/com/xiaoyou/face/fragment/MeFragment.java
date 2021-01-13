@@ -94,7 +94,7 @@ public class MeFragment extends Fragment {
         List<Login> lists = new ArrayList<>();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (StudentInfoTO studentInfo : list) {
-            lists.add(new Login(studentInfo.getStuId(),studentInfo.getName(),sdf.format(studentInfo.getDateTime())));
+            lists.add(new Login(studentInfo.getStuId(),studentInfo.getName(),studentInfo.getSituation(),sdf.format(studentInfo.getDateTime()),studentInfo.getGPS_msg()));
         }
         // 表格显示数据
         showDetail(lists);

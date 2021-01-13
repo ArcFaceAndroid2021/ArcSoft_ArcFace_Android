@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "ChooseFunctionActivity";
     private static final int ACTION_REQUEST_PERMISSIONS = 0x001;
     // 在线激活所需的权限
-    private static final String[] NEEDED_PERMISSIONS = new String[]{Manifest.permission.READ_PHONE_STATE};
+    private static final String[] NEEDED_PERMISSIONS = new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
     boolean libraryExists = true;
     // Demo 所需的动态库文件
     private static final String[] LIBRARIES = new String[]{

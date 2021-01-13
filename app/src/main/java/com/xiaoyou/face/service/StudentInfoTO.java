@@ -17,6 +17,30 @@ public class StudentInfoTO {
     private String name;
     //打卡时间
     private Date dateTime;
+    //签到情况
+    private String situation;
+    //位置信息
+    private  String GPS_msg;
+
+
+    public String getSituation() {
+        return situation;
+    }
+
+    public void setSituation(String situation) {
+        this.situation = situation;
+    }
+
+    public String getGPS_msg() {
+        return GPS_msg;
+    }
+
+    public void setGPS_msg(String GPS_msg) {
+        this.GPS_msg = GPS_msg;
+    }
+
+
+
 
     public String getStuId() {
         return stuId;

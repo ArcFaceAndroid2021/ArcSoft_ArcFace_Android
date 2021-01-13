@@ -121,9 +121,8 @@ public interface Service {
      * 添加请假学生的考勤记录
      * @param stuId
      * @param name
-     * @param data
      * @return
      */
-    boolean addLeave(String stuId,String name,LocalDate data);
+    boolean addLeave(String stuId,String name) throws ParseException ;
 
 }

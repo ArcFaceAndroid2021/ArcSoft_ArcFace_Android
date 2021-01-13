@@ -95,10 +95,16 @@ public class ToolFragment extends Fragment {
 
         yvals.add(new PieEntry(history.getIsSignUp(), "已签到"));
         yvals.add(new PieEntry(history.getNotSigUp(), "未签到"));
+
+        //添加迟到和请假
+        yvals.add(new PieEntry(history.getIsLate(), "已迟到"));
+        yvals.add(new PieEntry(history.getIsAsk(), "已请假"));
         //设置每份的颜色
         List<Integer> colors = new ArrayList<>();
         colors.add(Color.parseColor("#409EFF"));
         colors.add(Color.parseColor("#F56C6C"));
+        colors.add(Color.parseColor("#90EE90"));
+        colors.add(Color.parseColor("#FFDEAD"));
         // 图表初始化
         PieChart pieChart = binding.flContainer;
         //  是否显示中间的洞
@@ -268,14 +274,14 @@ public class ToolFragment extends Fragment {
         //数据集1
         List<BarEntry> valsComp1 = new ArrayList<BarEntry>();
         for(int i=0; i< histories.size();i++){
-            valsComp1.add(new BarEntry(i,new float[] { histories.get(i).getIsSign(), histories.get(i).getUnSign()}));
+            valsComp1.add(new BarEntry(i,new float[] { histories.get(i).getIsSign(), histories.get(i).getUnSign(),histories.get(i).getIsLate(),histories.get(i).getIsAsk()}));
         }
 
         //创建条形图对象
         BarDataSet setComp1 = new BarDataSet(valsComp1, "");
         setComp1.setDrawIcons(false);
-        setComp1.setColors(Color.parseColor("#67c23a"),Color.parseColor("#f56c6c"));
-        setComp1.setStackLabels(new String[]{"已签到", "未签到"});
+        setComp1.setColors(Color.parseColor("#409EFF"),Color.parseColor("#F56C6C"),Color.parseColor("#90EE90"),Color.parseColor("#FFDEAD"));
+        setComp1.setStackLabels(new String[]{"已签到", "未签到","已迟到","已请假"});
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(setComp1);
         //显示
