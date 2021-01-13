@@ -93,13 +93,19 @@ public class ToolFragment extends Fragment {
         // 获取签到记录
         Service service = new SQLiteHelper(getContext());
         History history = service.getTodayHistory();
+        
+        //yvals.add(new PieEntry(history.getIsSignUp(), "已签到"));
+        //yvals.add(new PieEntry(history.getNotSigUp(), "未签到"));
+        //yvals.add(new PieEntry(history.getIsLate(), "已迟到"));
+        //yvals.add(new PieEntry(history.getIsAsked(), "已请假"));
 
+        //******使用静态数据测试*************//
         yvals.add(new PieEntry(10, "已签到"));
         yvals.add(new PieEntry(10, "未签到"));
         //添加迟到和请假
         yvals.add(new PieEntry(10, "已迟到"));
         yvals.add(new PieEntry(10, "已请假"));
-
+        //**********************************//
         //设置每份的颜色
         List<Integer> colors = new ArrayList<>();
         colors.add(Color.parseColor("#409EFF"));
