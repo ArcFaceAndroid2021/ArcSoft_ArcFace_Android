@@ -257,7 +257,7 @@ public class ToolFragment extends Fragment {
         // 获取考勤历史
         Service service = new SQLiteHelper(getContext());
         //List<DateHistoryTO> histories = service.getHistory();
-
+        //DateHistortTO类需要添加两个int变量记录每日的请假和迟到人数
         //*****测试用数据*****
         List<DateHistoryTO> histories= new ArrayList<>();
         histories.add(new DateHistoryTO(2021,1,13,10,10,10,10));
