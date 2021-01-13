@@ -2,8 +2,10 @@ package com.xiaoyou.face.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -16,16 +18,21 @@ import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
 import com.xiaoyou.face.R;
+import com.xiaoyou.face.activity.BaseActivity;
 import com.xiaoyou.face.activity.RegisterAndRecognizeActivity;
 import com.xiaoyou.face.activity.SignDetailActivity;
 import com.xiaoyou.face.adapter.FunctionAdapter;
 import com.xiaoyou.face.databinding.FragmentIndexBinding;
 import com.xiaoyou.face.model.Channel;
 import com.xiaoyou.face.service.DateHistoryTO;
+import com.xiaoyou.face.service.RegisterInfo;
 import com.xiaoyou.face.service.SQLiteHelper;
 import com.xiaoyou.face.service.Service;
 import com.xiaoyou.face.utils.Tools;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +71,7 @@ public class IndexFragment extends Fragment implements
         super.onCreate(savedInstanceState);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // 这里我们使用bindview 来进行视图绑定
@@ -92,6 +100,8 @@ public class IndexFragment extends Fragment implements
         channelList.add(new Channel(R.mipmap.face,"人脸录入"));
         channelList.add(new Channel(R.mipmap.login,"开始签到"));
         channelList.add(new Channel(R.mipmap.statistics,"签到详情"));
+        //添加请假按钮，懒得找合适的icon就随便用了一个
+        channelList.add(new Channel(R.mipmap.search,"快给爷请假"));
         binding.toolList.setAdapter(new FunctionAdapter(channelList,getContext()));
         // grad 布局点击事件监听
         binding.toolList.setOnItemClickListener((parent, view, position, id) -> {
@@ -107,6 +117,26 @@ public class IndexFragment extends Fragment implements
                     break;
                 case 2:
                     startActivity(new Intent(getContext(), SignDetailActivity.class));
+                    break;
+                case 3:
+                    //新增一个对话框
+                    new MaterialDialog.Builder(getContext())
+                            .customView(R.layout.dialog_input, true)
+                            .title("请假信息录入")
+                            .positiveText("确认请假")
+                            .onPositive((dialog, which) -> {
+                                // 点击录入的时的点击事件
+                                MaterialEditText no = dialog.findViewById(R.id.input_no);//学号信息
+                                MaterialEditText name = dialog.findViewById(R.id.input_name);//姓名
+
+
+                                Service sqLiteHelper = new SQLiteHelper(getContext());
+                                //绑定SQLite对应的请假函数
+                                sqLiteHelper.addLeave(no.getEditValue(),name.getEditValue(),LocalDate.now() );
+                                System.out.println("Student id :"+no.getEditValue()+"    Student name is :"+name.getEditValue());
+                            }).show();
+
+
                     break;
                 default:
                     break;
