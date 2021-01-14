@@ -593,7 +593,7 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
                     Connection cn =DriverManager.getConnection(url,"FaceCheck",password);
                     System.out.println("签到Connection连接数据库成功");
                     Statement st = cn.createStatement();
-                    String sql ="UPDATE  attendance SET is_Sign = 0,  is_Asked = 1， is_Late = 0 WHERE stu_id = " + selectionArgs[0] + " AND day= " + selectionArgs[1] + " AND month = " + selectionArgs[2] +" AND year = " + selectionArgs[3];
+                    String sql ="UPDATE  attendance SET is_Sign = 0,is_Asked = 1,is_Late = 0 WHERE stu_id = " + selectionArgs[0] + " AND day= " + selectionArgs[1] + " AND month = " + selectionArgs[2] +" AND year = " + selectionArgs[3];
                     System.out.println(sql);
                     st.execute(sql);
                     System.out.println("更新成功");

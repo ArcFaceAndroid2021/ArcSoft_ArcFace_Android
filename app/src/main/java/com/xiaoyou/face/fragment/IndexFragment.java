@@ -143,7 +143,7 @@ public class IndexFragment extends Fragment implements
                                     if(sqLiteHelper.addLeave(no.getEditValue(),name.getEditValue())){
                                         ToastUtils.info("请假成功!请前往签到详情查看");
                                     } else {
-                                        ToastUtils.info("请假失败!请检查是否已请假或者信息错误");
+                                        ToastUtils.info("请假失败!请检查是否信息错误");
                                     }
                                     System.out.println("Student id :"+no.getEditValue()+"    Student name is :"+name.getEditValue());
                                 } catch (ParseException e){
