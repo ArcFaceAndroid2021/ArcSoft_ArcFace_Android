@@ -234,10 +234,11 @@ public class SQLiteHelper extends SQLiteOpenHelper implements Service {
     public History getTodayHistory() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] selectionArgs = new String[3];
+        String[] selectionArgs = new String[4];
         selectionArgs[0] = String.valueOf(LocalDateTime.now().getDayOfMonth());
         selectionArgs[1] = String.valueOf(LocalDate.now().getMonthValue());
         selectionArgs[2] = String.valueOf(LocalDate.now().getYear());
+        selectionArgs[3] = String.valueOf(1);
         //请假 is_Asked
         String[] selectionArgsAsk = new String[4];
         selectionArgsAsk[0] = String.valueOf(LocalDateTime.now().getDayOfMonth());

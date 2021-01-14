@@ -27,6 +27,7 @@ import com.xiaoyou.face.model.Channel;
 import com.xiaoyou.face.service.DateHistoryTO;
 import com.xiaoyou.face.service.SQLiteHelper;
 import com.xiaoyou.face.service.Service;
+import com.xiaoyou.face.utils.ToastUtils;
 import com.xiaoyou.face.utils.Tools;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
@@ -139,21 +140,22 @@ public class IndexFragment extends Fragment implements
                                 Service sqLiteHelper = new SQLiteHelper(getContext());
                                 //绑定SQLite对应的请假函数
                                 try{
-                                    sqLiteHelper.addLeave(no.getEditValue(),name.getEditValue());
+                                    if(sqLiteHelper.addLeave(no.getEditValue(),name.getEditValue())){
+                                        ToastUtils.info("请假成功!请前往签到详情查看");
+                                    } else {
+                                        ToastUtils.info("请假失败!请检查是否已请假或者信息错误");
+                                    }
                                     System.out.println("Student id :"+no.getEditValue()+"    Student name is :"+name.getEditValue());
                                 } catch (ParseException e){
                                     System.out.println("error!");
                                 }
 
-
                             }).show();
-
-
                     break;
                 case 5:
                     //to do
                     //提醒
-
+                    ToastUtils.info("没有权限!请前往服务器进行操作");
                     //打开另一个APP
 //                    try{
 //                        //startActivity(new Intent(getContext(), JPushMainActivity.class));
